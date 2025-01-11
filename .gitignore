@@ -1,0 +1,23 @@
+# Игнорировать системные файлы
+__pycache__/
+*.pyc
+
+# Логи
+*.log
+
+# Конфиденциальные файлы
+.env
+*.key
+
+# Игнорировать Docker артефакты
+docker-compose.override.yml
+
+# Игнорировать зависимости
+*.egg-info/
+*.dist-info/
+
+# Игнорировать IDE-конфигурации
+.vscode/
+.idea/
+*.swp
+.DS_Store

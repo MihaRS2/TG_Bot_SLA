@@ -1,0 +1,5 @@
+aiogram==2.21
+asyncpg==0.24.0
+cryptography==41.0.1
+python-dotenv==1.0.0
+aioschedule

@@ -1,0 +1,47 @@
+services:
+  bot:
+    build: ./bot
+    env_file: .env
+    depends_on:
+      - db
+    volumes:
+      - ./bot/app:/app
+    restart: always
+    container_name: telegram_bot
+    tty: true
+    environment:
+      - TZ=${TIMEZONE}
+      - ENCRYPTED_TOKEN=${ENCRYPTED_TOKEN}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - NOTIFICATION_GROUP_ID=${NOTIFICATION_GROUP_ID}
+      - LOG_LEVEL=${LOG_LEVEL}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    container_name: postgres_db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}  # Передаем расшифрованный пароль из переменной окружения хоста
+      - POSTGRES_DB=${DB_NAME}
+      - TZ=${TIMEZONE}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
